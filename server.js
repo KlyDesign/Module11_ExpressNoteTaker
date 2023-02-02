@@ -3,7 +3,7 @@ const path = require('path');
 const data = require('./db/db.json');
 const fs = require('fs');
 
-const PORT = 3001;
+const PORT = 3000;
 
 const app = express();
 
@@ -23,31 +23,37 @@ app.get('/notes', (req, res) => {
 
 //routes for data movement with db and response back
 app.get('/api/notes', (req, res) => {
-  fs.readFileSync(path.join(__dirname, './db/db.json') )
-  res.json(data)
+  // let noteList = fs.readFileSync(path.join(__dirname, './db/db.json'))
+  res.sendFile(path.join(__dirname, './db/db.json'));
 });
 
-// app.post('/api/notes', (req,res) => {
-//   json = req.body;
-//   fs.appendFile(path.join('./db/db.json'), JSON.stringify(json), function (err) {
-//     if (err) throw err;
-//     console.log('The "data to append" was appended to file!');
-//  });
-// })
 app.post('/api/notes', (req,res) => {
-  fs.readFile(path.join('./db/db.json'), function (err,test) {
-    if (err) return console.error('File read error: ', err)
-    let data = JSON.parse(test.toString());
-    data.push(req.body);
-    console.log(data)
-    fs.writeFile('./db/db.json', JSON.stringify(data), (err) => {  // WRITE
-      if (err) {
-          return console.error(err);
-      } else {
-          console.log("Success");
-      }
-    });
-  })
+  let newNote = req.body;
+  let noteList = JSON.parse(fs.readFileSync(path.join('./db/db.json')));
+  let notelength = (noteList.length).toString();
+
+  newNote.id = notelength;
+  noteList.push(newNote);
+
+  fs.writeFile('./db/db.json', JSON.stringify(noteList), (err) => {  // WRITE
+    if (err) {
+        return console.error(err);
+    } else {
+        console.log("Added To Json");
+    }
+  });
+  res.json(noteList);
+})
+
+//clears all notes couldnt get the ID working
+app.delete(`/api/notes/:id`, (req,res) => {
+  fs.writeFile('./db/db.json', '[]', (err) => {  // WRITE
+    if (err) {
+        return console.error(err);
+    } else {
+        console.log("Cleared All Entries");
+    }
+  });
 })
 
 app.listen(PORT, () => {
