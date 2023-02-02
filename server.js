@@ -7,6 +7,7 @@ const PORT = 3001;
 
 const app = express();
 
+
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
@@ -26,8 +27,27 @@ app.get('/api/notes', (req, res) => {
   res.json(data)
 });
 
+// app.post('/api/notes', (req,res) => {
+//   json = req.body;
+//   fs.appendFile(path.join('./db/db.json'), JSON.stringify(json), function (err) {
+//     if (err) throw err;
+//     console.log('The "data to append" was appended to file!');
+//  });
+// })
 app.post('/api/notes', (req,res) => {
-  console.log(req.body)
+  fs.readFile(path.join('./db/db.json'), function (err,test) {
+    if (err) return console.error('File read error: ', err)
+    let data = JSON.parse(test.toString());
+    data.push(req.body);
+    console.log(data)
+    fs.writeFile('./db/db.json', JSON.stringify(data), (err) => {  // WRITE
+      if (err) {
+          return console.error(err);
+      } else {
+          console.log("Success");
+      }
+    });
+  })
 })
 
 app.listen(PORT, () => {
