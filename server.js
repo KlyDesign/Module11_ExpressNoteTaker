@@ -22,7 +22,7 @@ app.get('/notes', (req, res) => {
 
 //routes for data movement with db and response back
 app.get('/api/notes', (req, res) => {
-  fs.readFileSync( path, options )
+  fs.readFileSync(path.join(__dirname, './db/db.json') )
   res.json(data)
 });
 
@@ -31,5 +31,5 @@ app.post('/api/notes', (req,res) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`);
+  console.log(`Example app listening at https://localhost:${PORT}`);
 });
