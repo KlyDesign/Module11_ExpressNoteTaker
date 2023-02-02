@@ -17,7 +17,8 @@
   ### visit the heroku deployment https://stark-tundra-99464.herokuapp.com/
 
   ## Usage
-  ### visit https://stark-tundra-99464.herokuapp.com/ or download and npm i and node server.js
+  ### visit https://stark-tundra-99464.herokuapp.com/ or 
+  ### download/ npm i // node server.js
 
   ## Screenshot
   ### ![Alt text](/public/assets/img/herokuPage.jpg?raw=true "Optional Title")
